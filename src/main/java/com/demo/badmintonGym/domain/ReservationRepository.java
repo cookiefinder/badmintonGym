@@ -13,15 +13,16 @@ public class ReservationRepository {
         this.reservationDao = SingletonBean.getReservationDao();
     }
 
-    public boolean reserve(Reservation reservation) {
-        return reservationDao.addReservation(reservation);
+    public void reserve(Reservation reservation) {
+        reservation.create();
+        reservationDao.addReservation(reservation);
     }
 
-    public boolean cancelReservation(Reservation reservation) {
-        return reservationDao.updateReservation(reservation);
+    public void cancelReservation(Reservation reservation) {
+        reservationDao.updateReservation(reservation);
     }
 
-    public Map<String, List<Reservation>> summary() {
-        return reservationDao.selectAll();
+    public List<Reservation> findAllReservations() {
+        return reservationDao.selectAllReservations();
     }
 }

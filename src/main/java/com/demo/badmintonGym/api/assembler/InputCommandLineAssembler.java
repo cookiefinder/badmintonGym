@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-public class RequestAssembler {
+public class InputCommandLineAssembler {
     public static Reservation toReservation(String[] args) throws ParseException {
         try {
             String[] StartAndEndTime = args[2].split("~");

@@ -1,13 +1,13 @@
 package com.demo.badmintonGym;
 
-import com.demo.badmintonGym.api.ReserveApi;
+import com.demo.badmintonGym.api.BadmintonGymApi;
 
 import java.text.ParseException;
 import java.util.Scanner;
 
 public class BadmintonGymApplication {
 
-    private static final ReserveApi reserveApi = new ReserveApi();
+    private static final BadmintonGymApi BADMINTON_GYM_API = new BadmintonGymApi();
 
     public static void main(String[] args) throws ParseException {
         while (true) {
@@ -18,16 +18,16 @@ public class BadmintonGymApplication {
                 break;
             }
             if (inputLine.equals("")) {
-                reserveApi.summary();
+                BADMINTON_GYM_API.summary();
             } else {
                 String[] arguments = inputLine.split(" ");
                 if (arguments[arguments.length - 1].equals("C")) {
-                    boolean result = reserveApi.cancelReservation(inputLine);
+                    boolean result = BADMINTON_GYM_API.cancelReservation(inputLine);
                     if (!result) {
                         System.out.println("取消订单失败");
                     }
                 } else {
-                    boolean result = reserveApi.reserve(inputLine);
+                    boolean result = BADMINTON_GYM_API.reserve(inputLine);
                     if (!result) {
                         System.out.println("预约失败");
                     }

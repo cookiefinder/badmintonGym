@@ -10,31 +10,27 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ReservationService {
+public class BadmintonGymApplicationService {
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationService() {
+    public BadmintonGymApplicationService() {
         this.reservationRepository = new ReservationRepository();
     }
 
-    public boolean reserve(Reservation reservation) {
-        reservation.create();
-        return reservationRepository.reserve(reservation);
+    public void reserve(Reservation reservation) {
+        reservationRepository.reserve(reservation);
     }
 
 
-    public boolean cancelReservation(Reservation reservation) {
-        return reservationRepository.cancelReservation(reservation);
+    public void cancelReservation(Reservation reservation) {
+        reservationRepository.cancelReservation(reservation);
     }
 
     public void summary() {
-        Map<String, List<Reservation>> records = reservationRepository.summary();
+        List<Reservation> reservations = reservationRepository.findAllReservations();
 
-        List<Reservation> totalReservations = new ArrayList<>();
-        records.values().forEach(totalReservations::addAll);
-
-        Map<String, List<Reservation>> mergedReservations = totalReservations.stream()
+        Map<String, List<Reservation>> mergedReservations = reservations.stream()
                 .collect(Collectors.groupingBy(Reservation::getBadmintonGymName));
 
         List<Integer> fees = new ArrayList<>();
