@@ -83,3 +83,9 @@
 
 how to test input from console by scanner class ？
 You can change the System.in stream using System.setIn() method.
+
+#### 新增需求的解决思路
+1. 获取优惠列表
+2. 判断是否处于优惠阶段
+3. 处于的话，将计算出的价格进行折算
+4. 在toString的时候再多判断一下状态

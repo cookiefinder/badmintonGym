@@ -16,6 +16,9 @@ public class BadmintonGymApplication {
 
     public static final String[] BADMINTON_GYM_NAMES = new String[]{"A", "B", "C", "D"};
     private static final String CANCEL_COMMAND_FLAG = "C";
+    private static final String EXIT_COMMAND_FLAG = "exit";
+    private static final String SUMMARY_COMMAND_FLAG = "";
+    public static final String COMMAND_SEPARATOR = " ";
 
     public static void main(String[] args) {
         BadmintonGymApi badmintonGymApi = new BadmintonGymApi();
@@ -23,14 +26,14 @@ public class BadmintonGymApplication {
             try {
                 Scanner scanner = new Scanner(System.in);
                 String inputLine = scanner.nextLine();
-                if (inputLine.equals("exit")) {
+                if (inputLine.equals(EXIT_COMMAND_FLAG)) {
                     break;
                 }
-                if (inputLine.equals("")) {
+                if (inputLine.equals(SUMMARY_COMMAND_FLAG)) {
                     Map<String, List<Reservation>> summary = badmintonGymApi.summary();
                     printToConsole(summary);
                 } else {
-                    String[] arguments = inputLine.split(" ");
+                    String[] arguments = inputLine.split(COMMAND_SEPARATOR);
                     if (arguments.length > 4 && CANCEL_COMMAND_FLAG.equals(arguments[4])) {
                         badmintonGymApi.cancelReservation(inputLine);
                     } else {

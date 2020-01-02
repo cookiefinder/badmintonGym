@@ -2,6 +2,7 @@ package com.demo.badmintonGym.domain;
 
 import com.demo.badmintonGym.infrastructure.ReservationDao;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ReservationRepository {
@@ -11,7 +12,7 @@ public class ReservationRepository {
         this.reservationDao = new ReservationDao();
     }
 
-    public void reserve(Reservation reservation) {
+    public void reserve(Reservation reservation) throws IOException {
         reservationDao.addReservation(reservation);
     }
 

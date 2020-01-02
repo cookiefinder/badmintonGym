@@ -3,6 +3,7 @@ package com.demo.badmintonGym.application.services;
 import com.demo.badmintonGym.domain.Reservation;
 import com.demo.badmintonGym.domain.ReservationRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BadmintonGymApplicationService {
@@ -13,7 +14,7 @@ public class BadmintonGymApplicationService {
         this.reservationRepository = new ReservationRepository();
     }
 
-    public void reserve(Reservation reservation) {
+    public void reserve(Reservation reservation) throws IOException {
         reservationRepository.reserve(reservation);
     }
 
