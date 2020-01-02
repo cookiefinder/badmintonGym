@@ -1,9 +1,13 @@
 package com.demo.badmintonGym.api;
 
+import com.demo.badmintonGym.api.assembler.ConsoleAssembler;
 import com.demo.badmintonGym.api.assembler.InputCommandLineAssembler;
 import com.demo.badmintonGym.application.services.BadmintonGymApplicationService;
+import com.demo.badmintonGym.domain.Reservation;
 
 import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
 
 public class BadmintonGymApi {
 
@@ -23,8 +27,9 @@ public class BadmintonGymApi {
         badmintonGymApplicationService.cancelReservation(InputCommandLineAssembler.toReservation(args));
     }
 
-    public void summary() {
-        badmintonGymApplicationService.summary();
+    public Map<String, List<Reservation>> summary() {
+        List<Reservation> reservations = badmintonGymApplicationService.findAllReservations();
+        return ConsoleAssembler.console(reservations);
     }
 
 }

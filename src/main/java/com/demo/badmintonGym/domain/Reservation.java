@@ -1,5 +1,7 @@
 package com.demo.badmintonGym.domain;
 
+import com.demo.badmintonGym.common.BadmintonGymChargeStandard;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,10 +46,6 @@ public class Reservation {
         return endTime;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
     public String getBadmintonGymName() {
         return badmintonGymName;
     }
@@ -57,28 +55,35 @@ public class Reservation {
     }
 
     public void cancel() {
-        if (!isReserved()) {
-            throw new RuntimeException();
+        if (isCancelled()) {
+            throw new RuntimeException("the booking being cancelled does not exist!");
         }
-        this.status = ReservationStatus.RESERVATION_CANCELED;
+        this.status = ReservationStatus.CANCELED;
         this.penalty = isWorkDay(date) ?
                 price.multiply(BigDecimal.valueOf(0.5)) :
                 price.multiply(BigDecimal.valueOf(0.25));
         this.price = null;
     }
 
-    public void create() {
-        this.status = ReservationStatus.RESERVATION_SUCCEED;
+    public boolean isCancelled() {
+        return this.status == ReservationStatus.CANCELED;
+    }
+
+    public void init() {
+        this.status = ReservationStatus.SUCCEED;
         this.penalty = null;
         this.price = calculatePrice(date, startTime, endTime);
     }
 
     private BigDecimal calculatePrice(Date date, Integer startTime, Integer endTime) {
-        if (isWorkDay(date)) {
-            return BigDecimal.valueOf((endTime - startTime) * 55);
-        } else {
-            return BigDecimal.valueOf((endTime - startTime) * 50);
+        int price = 0;
+        for (int i = startTime + 1; i <= endTime ; i++) {
+            BigDecimal eachPrice = isWorkDay(date) ?
+                    BadmintonGymChargeStandard.getWorkdayPriceWhen(i) :
+                    BadmintonGymChargeStandard.getNonWorkdayPriceWhen(i);
+            price += eachPrice.intValue();
         }
+        return BigDecimal.valueOf(price);
     }
 
     private boolean isWorkDay(Date date) {
@@ -86,10 +91,6 @@ public class Reservation {
         calendar.setTime(date);
         int idx = calendar.get(Calendar.DAY_OF_WEEK);
         return !(idx == SATURDAY || idx == SUNDAY);
-    }
-
-    public boolean isReserved() {
-        return this.status == ReservationStatus.RESERVATION_SUCCEED;
     }
 
     @Override
@@ -113,24 +114,20 @@ public class Reservation {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(new SimpleDateFormat("yyyy-MM-dd").format(date));
-        builder.append(" ");
-        builder.append(formatHour(startTime));
-        builder.append("~");
-        builder.append(formatHour(endTime));
-        builder.append(" ");
+        builder.append(" ")
+                .append(formatHour(startTime))
+                .append("~")
+                .append(formatHour(endTime))
+                .append(" ");
         if (this.price != null) {
             builder.append(price.toString());
-            builder.append("元");
-            builder.append("\n");
-            return builder.toString();
         } else {
-            builder.append("违约金");
-            builder.append(" ");
-            builder.append(penalty.toString());
-            builder.append("元");
-            builder.append("\n");
-            return builder.toString();
+            builder.append("违约金")
+                    .append(" ")
+                    .append(penalty.toString());
         }
+        builder.append("元");
+        return builder.toString();
     }
 
     private String formatHour(Integer startTime) {
