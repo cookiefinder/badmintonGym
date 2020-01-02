@@ -6,7 +6,6 @@ import com.demo.badmintonGym.domain.Reservation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ReservationDao {
     private static final List<Reservation> db = new ArrayList<>();
@@ -18,14 +17,11 @@ public class ReservationDao {
     }
 
     public void updateReservation(Reservation reservation) {
-        Optional<Reservation> optionalReservation = db.stream()
+        Reservation foundReservation = db.stream()
                 .filter(existedReservation -> existedReservation.equals(reservation))
-                .findFirst();
-        if (optionalReservation.isPresent()) {
-            optionalReservation.get().cancel();
-        } else {
-            throw new RuntimeException(ErrorEnums.NOT_EXIST.getMsg());
-        }
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(ErrorEnums.NOT_EXIST.getMsg()));
+        foundReservation.cancel();
     }
 
     public List<Reservation> selectAllReservations() {
